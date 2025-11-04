@@ -45,7 +45,7 @@ jobs:
 
       # we will bump up the version if it is one of patch, minor, or major
       - name: Get latest release
-        if: ${{ inputs.version != 'patch' && inputs.version != 'minor' && inputs.version != 'major' }}
+        if: ${{ inputs.version == 'patch' || inputs.version == 'minor' || inputs.version == 'major' }}
         run: |
           latest_version=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r .tag_name)
           echo "MY_VAR=${latest_version}" >> $GITHUB_ENV
