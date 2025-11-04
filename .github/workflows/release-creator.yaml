@@ -35,23 +35,23 @@ jobs:
           fetch-depth: 0 # Fetch the full history including tags
           ref: ${{ github.ref }} # Checkout the branch from which the workflow is triggered
 
-      # we will set the release version based on the user given input for older patch releases only ex: n-1, n-2
+      # we will set the release version based on the user given input
       - name: Set release version
-        if: ${{ inputs.version }} != 'patch' || ${{ inputs.version }} != 'minor' || ${{ inputs.version }} != 'major'
-        env: 
+        if: ${{ inputs.version != 'patch' && inputs.version != 'minor' && inputs.version != 'major' }}
+        env:
           VERSION: "${{ inputs.version }}"
         run: |
           echo "REL_VERSION=v${{ env.VERSION }}" >> $GITHUB_ENV
 
-      # we will auto bump up the version if it is only patch, minor, or major else we will just use the user given input
+      # we will bump up the version if it is one of patch, minor, or major
       - name: Get latest release
-        if: ${{ inputs.version }} != 'patch' || ${{ inputs.version }} != 'minor' || ${{ inputs.version }} != 'major'
+        if: ${{ inputs.version != 'patch' && inputs.version != 'minor' && inputs.version != 'major' }}
         run: |
           latest_version=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r .tag_name)
           echo "MY_VAR=${latest_version}" >> $GITHUB_ENV
 
       - name: Increment version
-        if: ${{ inputs.version }} == 'patch' || ${{ inputs.version }} == 'minor' || ${{ inputs.version }} == 'major'
+        if: ${{ inputs.version == 'patch' || inputs.version == 'minor' || inputs.version == 'major' }}
         env:
           MY_VAR: ${{ env.MY_VAR }}
         run: |
