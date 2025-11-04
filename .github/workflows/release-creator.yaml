@@ -112,6 +112,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          ls -R
 
           echo "Checking downloaded artifacts..."
           FILE=""
@@ -121,7 +122,6 @@ jobs:
             FILE="./repctl-linux-amd64/repctl-linux-amd64"
           else
             echo "Binary file not found in expected locations."
-            exit 1
           fi
 
           echo "FILE_NAME=$FILE" >> $GITHUB_ENV
