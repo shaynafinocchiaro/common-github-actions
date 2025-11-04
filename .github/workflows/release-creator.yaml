@@ -37,24 +37,25 @@ jobs:
 
       # we will set the release version based on the user given input for older patch releases only ex: n-1, n-2
       - name: Set release version
-        if: ${{ inputs.version != 'patch' || inputs.version != 'minor' || inputs.version != 'major' }}
+        if: ${{ inputs.version }} != 'patch' || ${{ inputs.version }} != 'minor' || ${{ inputs.version }} != 'major'
+        env: 
+          VERSION: "${{ inputs.version }}"
         run: |
-          echo "REL_VERSION=v${{ inputs.version }}" >> $GITHUB_ENV
+          echo "REL_VERSION=v${{ env.VERSION }}" >> $GITHUB_ENV
 
       # we will auto bump up the version if it is only patch, minor, or major else we will just use the user given input
       - name: Get latest release
-        if: ${{ inputs.version == 'patch' || inputs.version == 'minor' || inputs.version == 'major' }}
+        if: ${{ inputs.version }} != 'patch' || ${{ inputs.version }} != 'minor' || ${{ inputs.version }} != 'major'
         run: |
           latest_version=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest | jq -r .tag_name)
           echo "MY_VAR=${latest_version}" >> $GITHUB_ENV
-          echo "latest_version=${latest_version}"
 
       - name: Increment version
-        if: ${{ inputs.version == 'patch' || inputs.version == 'minor' || inputs.version == 'major' }}
+        if: ${{ inputs.version }} == 'patch' || ${{ inputs.version }} == 'minor' || ${{ inputs.version }} == 'major'
         env:
           MY_VAR: ${{ env.MY_VAR }}
         run: |
-          current_version=$MY_VAR
+          current_version="$MY_VAR"
 
           # The latest version does not exist. Set it to v0.0.0.
           if [[ "$current_version" = "null" ]]; then
