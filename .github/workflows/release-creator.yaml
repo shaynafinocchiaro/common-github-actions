@@ -117,7 +117,7 @@ jobs:
           fi
 
           if [ -d "repctl-linux-amd64" ]; then
-              FILE="repctl-linux-amd64"
+            FILE="./repctl-linux-amd64/repctl-linux-amd64"
           fi
 
           echo "FILE_NAME=$FILE" >> $GITHUB_ENV
