@@ -20,15 +20,8 @@ jobs:
       matrix:
         repo:
           [
-            "dell/goiscsi",
-            "dell/gonvme",
-            "dell/gocsi",
-            "dell/gofsutil",
-            "dell/gopowerstore",
-            "dell/gopowerscale",
-            "dell/gopowermax",
-            "dell/gounity",
-            "dell/goscaleio",
+            "shaynafinocchiaro/test-goiscsi",
+            "shaynafinocchiaro/test-gocsi",
           ]
     steps:
       - name: Trigger Release of ${{ matrix.repo }}
@@ -56,7 +49,7 @@ jobs:
     needs: release_independent_repos
     strategy:
       matrix:
-        repo: ["dell/gobrick"]
+        repo: ["shaynafinocchiaro/gobrick", "shaynafinocchiaro/test-csi-metadata-retriever"]
     steps:
       - name: Trigger Release of ${{ matrix.repo }}
         uses: peter-evans/repository-dispatch@v4
@@ -75,3 +68,4 @@ jobs:
           chmod +x check_workflow_status.sh
           bash check_workflow_status.sh ${{ secrets.CSMBOT_PAT }} ${{ matrix.repo }} "repository_dispatch"
         shell: bash
+
